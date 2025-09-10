@@ -28,6 +28,7 @@
                         <tr>
                             <td><?php    echo $i; ?></td>
                             <td>{{$name->class_name}}</td>
+                            
                             <td>
                                 <div class="d-flex">
                                     <div class="me-2">
@@ -51,7 +52,7 @@
                                                             <input type="hidden" class="form-control input" name="class_id"
                                                                 value="{{$name->id}}" id="class-id">
                                                             <input type="text" class="form-control input" name="class_name"
-                                                                placeholder="Class" id="class-update-name {{$name->id}}"
+                                                                placeholder="Class" id="class-update-name-{{$name->id}}"
                                                                 value="{{old('class_name', $name->class_name)}}">
                                                             <span id="class-name-error" class="text-danger d-block"></span>
                                                     </div>
@@ -108,130 +109,4 @@
             </table>
         </div>
     </div>
-@endsection
-@section('script')
-    <script>
-        $(document).ready(function () {
-            $('#class-form').on('submit', function (event) {
-                event.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                $.ajax({
-                    url: '{{route('store.class')}}',
-                    data: $(this).serialize(),
-                    type: 'post',
-                    success: function (data) {
-                        if (data.code === 422) {
-                            console.log(data);
-                            $('#class-name-error').html(data.error.class_name[0]);
-                        } else if (data.status === 200) {
-                            //alert(data.message);
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $('#class-form')[0].reset();
-                            $('#class-name-error').html('');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                            
-                        }
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                        // $('#saveBtn').html('Save Changes');
-
-                    },
-                });
-            });
-            $('.class-form-update').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find('#class-id').val();
-                const data = {
-                    'class_name': $(this).find(`#class-update-name\\ ${id}`).val()
-                }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'put',
-                    url: '/update-class/' + id,
-                    data: data,
-                    success: function (data) {
-                        if (data.code === 422) {
-                            console.log(data);
-                            $(this).find('#class-name-error').html(data.error.class_name[0]);
-                        } else if (data.status === 200) {
-                            // alert(data.message);
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                        });
-                            // $('#class-form-update')[0].reset();
-                            $('#class-name-error').html('');
-                            $(`#classEditModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    },
-                    error: function (data) {
-                        console.log('Error:', data);
-                        // alert('not update');
-                        Swal.fire({
-                                title: "Error !",
-                                text: 'not update',
-                                icon: 'error'
-                        });
-                    }
-                });
-            });
-            $('.class-form-delete').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find('#class-delete-id').val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'delete',
-                    url: '/delete-class/' + id,
-                    success: function (data) {
-                        if (data.code === 200) {
-                            console.log(data);
-                            // alert(data.message);
-                             Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#deleteClassModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        } 
-                    },
-                    error: function (xhr) {
-                        console.log('Delete Error:', xhr.responseText);
-                        // alert('Delete failed.');
-                         Swal.fire({
-                                title: "Error !",
-                                text: 'Delete failed',
-                                icon: 'error'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
 @endsection

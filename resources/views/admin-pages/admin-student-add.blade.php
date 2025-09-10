@@ -6,24 +6,26 @@
     <div class="mt-3">
 
         <form action="{{route('store.student')}}" method="post" id="student-form-add">
-            <input type="text" class="form-control input mb-3" name="name" placeholder="Student Name" id="studnet-name">
+            <input type="text" class="form-control input " name="name" placeholder="Student Name" id="student-name">
             <span class="text-danger" id="student-name-error"></span>
-            <input type="number" class="form-control input mt-2 mb-3" name="age" placeholder="Age" id="student-age">
+            <input type="number" class="form-control input mt-3 " name="age" placeholder="Age" id="student-age">
             <span class="text-danger" id="student-age-error"></span>
-            <input type="date" class="form-control input mt-2 mb-3" name="dob" placeholder="DOB" id="student-dob">
+            <input type="date" class="form-control input mt-3 " name="dob" placeholder="DOB" id="student-dob">
             <span class="text-danger" id="student-dob-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="father_name" placeholder="Father Name"
+            <input type="text" class="form-control input mt-3" name="email" placeholder="Email Id" id="student-email">
+            <span class="text-danger" id="student-email-error"></span>
+            <input type="text" class="form-control input mt-3 " name="father_name" placeholder="Father Name"
                 id="student-father-name">
             <span class="text-danger" id="student-father-name-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="mother_name" placeholder="Mother Name"
+            <input type="text" class="form-control input mt-3 " name="mother_name" placeholder="Mother Name"
                 id="student-mother-name">
             <span class="text-danger" id="student-mother-name-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="district" placeholder="District"
+            <input type="text" class="form-control input mt-3 " name="district" placeholder="District"
                 id="student-district">
             <span class="text-danger" id="student-district-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="city" placeholder="City" id="student-city">
+            <input type="text" class="form-control input mt-3 " name="city" placeholder="City" id="student-city">
             <span class="text-danger" id="student-city-error"></span>
-            <select class="form-select input mt-2 mb-3" aria-label="Default select example" name="state" id="student-state">
+            <select class="form-select input mt-3 " aria-label="Default select example" name="state" id="student-state">
                 <option disabled selected>Select State</option>
                 <option value="Tamilnadu">Tamilnadu</option>
                 <option value="Kerala">Kerala</option>
@@ -37,25 +39,25 @@
                 <option value="Uttar pradesh">Uttar pradesh</option>
             </select>
             <span class="text-danger" id="student-state-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="nationality" placeholder="Nationality"
+            <input type="text" class="form-control input mt-3 " name="nationality" placeholder="Nationality"
                 id="student-nationality">
             <span class="text-danger" id="student-nationality-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="father_occupation" placeholder="Father Occupation"
+            <input type="text" class="form-control input mt-3 " name="father_occupation" placeholder="Father Occupation"
                 id="student-father-occupation">
             <span class="text-danger" id="student-father-occupation-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="mother_occupation" placeholder="Mother Occupation"
+            <input type="text" class="form-control input mt-3 " name="mother_occupation" placeholder="Mother Occupation"
                 id="student-mother-occupation">
             <span class="text-danger" id="student-mother-occupation-error"></span>
-            <input type="number" class="form-control input mt-2 mb-3" name="mobile_no" placeholder="Mobile No"
+            <input type="number" class="form-control input mt-3 " name="mobile_no" placeholder="Mobile No"
                 id="student-mobile-no">
             <span class="text-danger" id="student-mobile-no-error"></span>
-            <textarea class="form-control textarea mt-2 mb-3" name="address" placeholder="Address"
+            <textarea class="form-control textarea mt-3 " name="address" placeholder="Address"
                 id="student-address"></textarea>
             <span class="text-danger" id="student-address-error"></span>
-            <input type="text" class="form-control input mt-2 mb-3" name="bloodgroup" placeholder="Blood Group"
+            <input type="text" class="form-control input mt-3 " name="bloodgroup" placeholder="Blood Group"
                 id="student-blood-group">
             <span class="text-danger" id="student-blood-group-error"></span>
-            <select class="form-select input mt-2 mb-3" aria-label="Default select example" name="class_id"
+            <select class="form-select input mt-3 " aria-label="Default select example" name="class_id"
                 id="student-class">
                 <option disabled selected>Select Class</option>
                 @foreach ($class as $clname)
@@ -74,6 +76,7 @@
                         <th>Name</th>
                         <th>Age</th>
                         <th>Date Of Birth</th>
+                        <th>Email ID</th>
                         <th>Father Name</th>
                         <th>Mother Name</th>
                         <th>District</th>
@@ -98,6 +101,7 @@
                             <td>{{$studentDetails->name}}</td>
                             <td>{{$studentDetails->age}}</td>
                             <td>{{$studentDetails->dob}}</td>
+                            <td>{{$studentDetails->email}}</td>
                             <td>{{$studentDetails->father_name}}</td>
                             <td>{{$studentDetails->mother_name}}</td>
                             <td>{{$studentDetails->district}}</td>
@@ -145,6 +149,9 @@
                                                             <input type="date" class="form-control input mt-2 mb-3" name="dob"
                                                                 placeholder="DOB" id="student-update-dob-{{$studentDetails->id}}" value="{{ old('dob', $studentDetails->dob) }}">
                                                             <span class="text-danger" id="student-dob-error-{{$studentDetails->id}}"></span>
+                                                            <input type="text" class="form-control input mt-2 mb-3" name="email"
+                                                                placeholder="email" id="student-update-email-{{$studentDetails->id}}" value="{{ old('email', $studentDetails->email) }}">
+                                                            <span class="text-danger" id="student-email-error-{{$studentDetails->id}}"></span>
                                                             <input type="text" class="form-control input mt-2 mb-3"
                                                                 name="father_name" placeholder="Father Name"
                                                                 id="student-update-father-name-{{$studentDetails->id}}" value="{{ old('father_name', $studentDetails->father_name) }}">
@@ -281,240 +288,3 @@
 
 @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function () {
-            $('#student-form-add').on('submit', function (event) {
-                event.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '{{route('store.student')}}',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 422) {
-                            if (data.error.name) {
-                                $('#student-name-error').html(data.error.name[0]);
-                            }
-                            if (data.error.age) {
-                                $('#student-age-error').html(data.error.age[0]);
-                            }
-                            if (data.error.dob) {
-                                $('#student-dob-error').html(data.error.dob[0]);
-                            }
-                            if (data.error.father_name) {
-                                $('#student-father-name-error').html(data.error.father_name[0]);
-                            }
-                            if (data.error.mother_name) {
-                                $('#student-mother-name-error').html(data.error.mother_name[0]);
-                            }
-                            if (data.error.district) {
-                                $('#student-district-error').html(data.error.district[0]);
-                            }
-                            if (data.error.city) {
-                                $('#student-city-error').html(data.error.city[0]);
-                            }
-                            if (data.error.state) {
-                                $('#student-state-error').html(data.error.state[0]);
-                            }
-                            if (data.error.nationality) {
-                                $('#student-nationality-error').html(data.error.nationality[0]);
-                            }
-                            if (data.error.father_occupation) {
-                                $('#student-father-occupation-error').html(data.error.father_occupation[0]);
-                            }
-                            if (data.error.mother_occupation) {
-                                $('#student-mother-occupation-error').html(data.error.mother_occupation[0]);
-                            }
-                            if (data.error.mobile_no) {
-                                $('#student-mobile-no-error').html(data.error.mobile_no[0]);
-                            }
-                            if (data.error.address) {
-                                $('#student-address-error').html(data.error.address[0]);
-                            }
-                            if (data.error.bloodgroup) {
-                                $('#student-blood-group-error').html(data.error.bloodgroup[0]);
-                            }
-                            if (data.error.class_id) {
-                                $('#student-class-error').html(data.error.class_id[0]);
-                            }
-                        } else if (data.status === 200) {
-                            $('#student-name-error').html('');
-                            $('#student-age-error').html('');
-                            $('#student-dob-error').html('');
-                            $('#student-father-name-error').html('');
-                            $('#student-mother-name-error').html('');
-                            $('#student-district-error').html('');
-                            $('#student-city-error').html('');
-                            $('#student-nationality-error').html('');
-                            $('#student-father-occupation-error').html('');
-                            $('#student-mother-occupation-error').html('');
-                            $('#student-mobile-no-error').html('');
-                            $('#student-address-error').html('');
-                            $('#student-blood-group-error').html('');
-                            $('#student-class-error').html('');
-
-                            // alert(data.message);
-                            Swal.fire({
-                                title: "Good Job!",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-
-
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        // alert('not created student');
-                        Swal.fire({
-                            title: "Error !",
-                            text: 'Not Created Student',
-                            icon: 'error'
-                        });
-                    }
-                });
-            });
-            $('.student-form-update').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find('input[name="student_id"]').val();
-                const data = {
-                    'name': $(this).find(`#student-update-name-${id}`).val(),
-                    'age': $(this).find(`#student-update-age-${id}`).val(),
-                    'dob': $(this).find(`#student-update-dob-${id}`).val(),
-                    'father_name':$(this).find(`#student-update-father-name-${id}`).val(),
-                    'mother_name':$(this).find(`#student-update-mother-name-${id}`).val(),
-                    'district':$(this).find(`#student-update-district-${id}`).val(),
-                    'city':$(this).find(`#student-update-city-${id}`).val(),
-                    'state':$(this).find(`#student-update-state-${id}`).val(),
-                    'nationality':$(this).find(`#student-update-nationality-${id}`).val(),
-                    'father_occupation':$(this).find(`#student-update-father-occupation-${id}`).val(),
-                    'mother_occupation':$(this).find(`#student-update-mother-occupation-${id}`).val(),
-                    'address':$(this).find(`#student-update-address-${id}`).val(),
-                    'mobile_no':$(this).find(`#student-update-mobile-no-${id}`).val(),
-                    'bloodgroup':$(this).find(`#student-update-blood-group-${id}`).val(),
-                    'class_id':$(this).find(`#student-update-class-id-${id}`).val()
-                 }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: `/update-student/${id}`,
-                    type: 'put',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 422) {
-                            if (data.error.name) {
-                                $(`#student-name-error-${id}`).html(data.error.name[0]);
-                            }
-                            if (data.error.age) {
-                                $(`#student-age--error-${id}`).html(data.error.age[0]);
-                            }
-                            if (data.error.dob) {
-                                $(`#student-dob-error-${id}`).html(data.error.dob[0]);
-                            }
-                            if (data.error.father_name) {
-                                $(`#student-father-name-error-${id}`).html(data.error.father_name[0]);
-                            }
-                            if (data.error.mother_name) {
-                                $(`#student-mother-name-error-${id}`).html(data.error.mother_name[0]);
-                            }
-                            if (data.error.district) {
-                                $(`#student-district-error-${id}`).html(data.error.district[0]);
-                            }
-                            if (data.error.city) {
-                                $(`#student-city--error-${id}`).html(data.error.city[0]);
-                            }
-                            if (data.error.state) {
-                                $(`#student-state-error-${id}`).html(data.error.state[0]);
-                            }
-                            if (data.error.nationality) {
-                                $(`#student-nationality-error-${id}`).html(data.error.nationality[0]);
-                            }
-                            if (data.error.father_occupation) {
-                                $(`#student-father-occupation-error-${id}`).html(data.error.father_occupation[0]);
-                            }
-                            if (data.error.mobile_no) {
-                                $(`#student-mobile-no-error-${id}`).html(data.error.mobile_no[0]);
-                            }
-                            if (data.error.address) {
-                                $(`#student-address-error-${id}`).html(data.error.address[0]);
-                            }
-                            if (data.error.bloodgroup) {
-                                $(`#student-blood-group-error-${id}`).html(data.error.bloodgroup[0]);
-                            }
-                            if (data.error.class_id) {
-                                $(`#student-class-id-error-${id}`).html(data.error.class_id[0]);
-                            }
-                        } else if (data.status === 200) {
-                            console.log(data.message);
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#studentEditModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        Swal.fire({
-                            title: "Error !",
-                            text: 'Not Updated Student',
-                            icon: 'error'
-                        });
-                    }
-                });
-            });
-            $('.student-form-delete').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find(`input[name="student_delete_id"]`).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url:`/delete-student/${id}`,
-                    type: 'delete',
-                    success: function (data){
-                        console.log(data);
-                        if (data.status === 200) {
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#deleteStudentModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    },
-                    error: function (xhr){
-                        console.log(xhr);
-                        Swal.fire({
-                            title: "Error !",
-                            text: 'Not Deleted Student',
-                            icon: 'error'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-@endsection

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class StudentLeaveStatus extends Model
 {
     use HasFactory;
-    protected $table = 'student_leave_status';
+    protected $table = 'student_leave_statuses';
     protected $fillable = ['date', 'student_id', 'class_id', 'status'];
 
     public $timestamps = false;

@@ -22,35 +22,18 @@
 </head>
 
 <body class="@yield('bg-color')">
+    <div id="spinner-load">
+        <div id="box">
+            <div id="spinner"></div>
+            <div class="text">Loading...</div>
+        </div>
+    </div>
     <div class="container">
         @include('layouts.includes.sidebar-menu-teacher')
         @yield('content')
     </div>
-    <script>
-        $(document).ready(function () {
-            $('#logout-teacher').on('submit', function(event) {
-                event.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{route('teacher.logout')}}",
-                    type: "POST",
-                    success: function (data) {
-                        Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                        });
-                        window.location.href = data.redirect;
-                    }
-                });
-            });
-        });
-    </script>
-    @yield('script')
+    <script src="{{ url('js/teacher-script.js') }}"></script>
+    <script src="{{ url('js/loader-script.js') }}"></script>
 </body>
 
 </html>

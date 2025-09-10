@@ -12,15 +12,24 @@
         crossorigin="anonymous"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{url('css/style.css')}}">
 </head>
 
-<body class="@yield('bg-color')">
+<body class="@yield('bg-color')">    
+    <div id="spinner-load">
+        <div id="box">
+            <div id="spinner"></div>
+            <div class="text">Loading...</div>
+        </div>
+    </div>
     @include('layouts.includes.login-header')
     @yield('content')
-    @yield('script')
+    
+    <script src="{{ url('js/login-script.js') }}"></script>
+    <script src="{{ url('js/loader-script.js') }}"></script>
 </body>
 
 </html>

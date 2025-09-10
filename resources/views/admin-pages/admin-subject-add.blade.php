@@ -7,7 +7,7 @@
 
                 <form action="{{route('store.subject')}}" method="post" id="subject-form-add">
                     @csrf
-                    <input type="text" class="form-control input mb-3" name="subject" placeholder="Subject Name"
+                    <input type="text" class="form-control input " name="subject" placeholder="Subject Name"
                         id="subject-name">
                     <span class="d-block text-danger" id="subject-name-error"></span>
                     <button type="submit" name="subject_submit" class="btn btn-info mt-3 text-light">Add Subject</button>
@@ -112,132 +112,6 @@
 
     @section('script')
         <script>
-            $(document).ready(function () {
-                $('#subject-form-add').on('submit', function (event) {
-                    event.preventDefault();
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: "{{route('store.subject')}}",
-                        type: "POST",
-                        data: $(this).serialize(),
-                        success: function (data) {
-                            console.log(data);
-                            if (data.code === 422) {
-                                if (data.error.subject) {
-                                    $('#subject-name-error').html(data.error.subject);
-                                }
-                            }else if(data.status === 200) {
-                                console.log(data.message);
-                                //alert(data.message);
-                                Swal.fire({
-                                title: "Good Job!",
-                                text: data.message,
-                                icon: 'success'
-                                });
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 5000);
-                                
-                            }
-                        },
-                        error: function (xhr) {
-                            console.log(xhr);
-                            //alert('not subject created');
-                            Swal.fire({
-                                title: "Error !",
-                                text: 'not subject created',
-                                icon: 'error'
-                        });
-                        }
-                    });
-                });
-                $('.subject-form-update').on('submit', function (event) {
-                    event.preventDefault();
-                    const id = $(this).find('#subject-id').val();
-                    const data = {
-                            'subject': $(this).find(`#subject-update-name\\ ${id}`).val() 
-                        }
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: `/update-subject/${id}`,
-                        type: 'put',
-                        data: data,
-                        success: function(data) {
-                            console.log(data);
-                            if (data.code === 422) {
-                                if (data.error.subject) {
-                                    $('#subject-name-error').html(data.error.subject);
-                                }
-                            } else if(data.status === 200) {
-                                console.log(data.message);
-                                // alert(data.message);
-                                Swal.fire({
-                                title: "Good Job!",
-                                text: data.message,
-                                icon: 'success'
-                                });
-                                $(`#subjectEditModal${id}`).modal('hide');
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 5000);
-                            }
-                        },
-                        error: function(xhr) {
-                            console.log(xhr);
-                            // alert('not updated');
-                            Swal.fire({
-                                title: "Error !",
-                                text: 'not updated',
-                                icon: 'error'
-                        });
-                        }
-                    });
-                });
-                $('.subject-form-delete').on('submit', function(event) {
-                    event.preventDefault();
-                    const id = $(this).find(`input[name="subject_delete_id"]`).val();
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: `/delete-subject/${id}`,
-                        type: 'delete',
-                        success: function (data) {
-                            console.log(data);
-                            if (data.status === 200) {
-                                // alert(data.message);
-                                Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#subjectDeleteModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                            }
-                        },
-                        error: function(xhr) {
-                            console.log(xhr);
-                            // alert('deleted failed');
-                            Swal.fire({
-                                title: "Error !",
-                                text: 'Delete failed',
-                                icon: 'error'
-                        });
-                        }
-                    });
-                })
-            });
+            
         </script>
     @endsection

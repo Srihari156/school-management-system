@@ -23,6 +23,7 @@
                                 <a class="nav-link text-light" href="{{route('admin.admin-teacher-add')}}">Teacher</a>
                                 <a class="nav-link text-light" href="{{route('admin.admin-subject-add')}}">Subject</a>
                                 <a class="nav-link text-light" href="{{route('admin.admin-assign-teacher-class')}}">Teacher Assign Class</a>
+                                <a class="nav-link text-light" href="{{route('admin.admin-fees-payment')}}">Fees Management</a>
                                 <a class="nav-link text-light" href="{{route('admin.admin-change-password')}}">Change Password</a>
                                 <form action="{{route('admin.logout')}}" method="post" id="logout-admin">
                                     @csrf

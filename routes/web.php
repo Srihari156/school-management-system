@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get("/", [LoginController::class, 'adminLogin'])->name('login.admin');
 Route::get('/teacher-login', [LoginController::class, 'teacherLogin'])->name('login.teacher');
 Route::get('/contact-us', [LoginController::class, 'contactUs'])->name('login.contact');
-Route::post('/admin-login', [LoginController::class, 'storeAdmin'])->name('storeLogin');
+Route::post('/admin-login-store', [LoginController::class, 'storeAdmin'])->name('storeLogin');
 Route::post('/teacher-login-store', [LoginController::class, 'storeTeacher'])->name('store.teacher-login');
 
 Route::middleware(['is.Admin'])->prefix("admin")->group(function () {
@@ -38,6 +39,10 @@ Route::middleware(['is.Admin'])->prefix("admin")->group(function () {
     Route::get('/subject-adds', [AdminController::class, 'adminSubjectAdd'])->name('admin.admin-subject-add');
     Route::get('/teacher-adds', [AdminController::class, 'adminTeacherAdd'])->name('admin.admin-teacher-add');
     Route::get('/assign-teacher-classes', [AdminController::class, 'adminAssignTeacher'])->name('admin.admin-assign-teacher-class');
+    Route::get('/fees-management', [AdminController::class, 'adminFeesPayment'])->name('admin.admin-fees-payment'); 
+    Route::post('/email-send', [AdminController::class, 'emailSend'])->name('admin.email-send');
+    Route::post('/get-sections', [AdminController::class, 'getSections'])->name('admin.getSection');
+    Route::post('/get-emails', [AdminController::class, 'getEmails'])->name('admin.getEmail');
     Route::get('/change-passwords', [AdminController::class, 'adminChangePassword'])->name('admin.admin-change-password');
 });
 Route::middleware(['is.Teacher'])->prefix("teacher")->group(function () {
@@ -55,4 +60,16 @@ Route::middleware(['is.Teacher'])->prefix("teacher")->group(function () {
     Route::get('/change-password', [TeacherController::class, 'teacherChangePassword'])->name('teacher.teacher-change-password');
 });
 
+ 
+Route::get('/pay/{order_id}', [PaymentController::class, 'showPaymentPage']);
+// Route::post('/payment/callback', [PaymentController::class, 'handleCallback']);
+// Route::get('/payment/failure', [PaymentController::class, 'paymentFailure']);
+Route::post('/payment/create', [PaymentController::class, 'createOrder'])->name('payment.create');
+Route::post('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
+// Route::get('/payment/success', function () {
+//     return view('payment.success');
+// })->name('success.page');
 
+// Route::get('/payment/failure', function () {
+//     return view('payment.failure');
+// })->name('failed.page');

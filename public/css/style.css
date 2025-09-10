@@ -124,6 +124,116 @@
     color: #f5f5f5;
 }
 
+#spinner-load {
+    position: fixed;           /* Full screen overlay */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #003262;
+    color: white;
+    z-index: 9999;
+}
+
+#box {
+    position: absolute;        /* Center within spinner-load */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* .select2-selection {
+    margin-top: 15px;
+} */
+/* Ensure Select2 takes full width of .form-control */
+/* .select2-container {
+    width: 100% !important;
+} */
+
+/* Style the visible box */
+.select2-container .select2-selection {
+    height: fit-content; /* match Bootstrap input height */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-top: 15px;
+}
+
+/* Proper down arrow */
+.select2-container .select2-selection__arrow {
+    height: 100%;
+    right: 10px;
+    display: none;
+}
+
+/* Red border on error */
+.select2-container .select2-selection.error-valid-border {
+    border: 1px solid #dc3545 !important; /* Bootstrap danger color */
+}
+
+.error-valid-border {
+    border: 1px solid #dc3545 !important;
+}
+
+#spinner {
+    height: 50px;
+    width: 50px;
+    border: 4px solid white;
+    border-top: 4px solid red;
+    border-bottom: 4px solid green;
+    border-radius: 50%;
+    margin-left: 35%;
+    transition-property: transform;
+    animation: rotate  1s infinite ease;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.text {
+    margin-top: 20px;
+    color: white;
+    font-size: 30px;
+    width: 12ch;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid white;
+    animation: typing 2s steps(12) infinite, blink 0.7s step-end infinite;
+}
+
+@keyframes typing {
+    0% {
+        width: 0ch;
+    }
+    50% {
+        width: 12ch;
+    }
+    100% {
+        width: 0ch;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
 @media screen and (min-width:539px) and (max-width:973px) {
     .admin-image {
         width: 0px;

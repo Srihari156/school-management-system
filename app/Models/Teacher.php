@@ -10,24 +10,32 @@ class Teacher extends Authenticatable
     use Notifiable;
 
     protected $table = 'teachers';
-    
+
     protected $fillable = [
-        'name', 
-        'age', 
-        'dob', 
-        'father_name', 
-        'mother_name', 
-        'degree', 
-        'experience', 
-        'subject_id', 
-        'mobile_no', 
-        'blood_group', 
-        'address', 
-        'password', 
+        'name',
+        'age',
+        'dob',
+        'email',
+        'father_name',
+        'mother_name',
+        'degree',
+        'experience',
+        'subject_id',
+        'mobile_no',
+        'blood_group',
+        'address',
+        'password',
         'role'
     ];
 
-   
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
     public $timestamps = false;
 

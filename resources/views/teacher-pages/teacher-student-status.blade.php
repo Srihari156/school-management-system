@@ -60,29 +60,3 @@
         </div>
 @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function () {
-            $('#status-form').submit(function (e) { 
-                e.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '',
-                    type: 'post',
-                    data: $(this).serialize(),
-                    success:function (data) {
-                        console.log(data);
-                        
-                    },
-                    error: function (xhr) {
-
-                    }
-                });
-            });
-        });
-    </script>
-@endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AmountModel;
 use App\Models\ClassModel;
 use App\Models\Logins;
 use App\Models\Student;
@@ -11,15 +12,21 @@ use App\Models\TeacherAssignClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Razorpay\Api\Api;
 
 class AdminController extends Controller
 {
     public function admin()
     {
         $name = Logins::all();
-        return view('admin-pages.admin-page', compact('name'));
+
+        $totalStudents = Student::count();
+        $totalTeachers = Teacher::count();
+
+        return view('admin-pages.admin-page', compact('name', 'totalTeachers', 'totalStudents'));
     }
     public function adminStudentAdd()
     {
@@ -56,12 +63,35 @@ class AdminController extends Controller
         $class = ClassModel::all();
         return view('admin-pages.admin-class-add', compact('class'));
     }
+    public function adminFeesPayment()
+    {
+        $classes = ClassModel::select('class_name')->get();
+
+        $classList = [];
+        $sectionList = [];
+
+        foreach ($classes as $item) {
+            if (strpos($item->class_name, '-') !== false) {
+                [$class, $section] = explode('-', $item->class_name, 2);
+
+                $classList[] = trim($class);
+                $sectionList[] = trim($section);
+            } else {
+                $classList[] = $item->class_name;
+            }
+        }
+
+        $classList = array_unique($classList);
+        $sectionList = array_unique($sectionList);
+
+        return view('admin-pages.fees-payment', compact('classList', 'sectionList'));
+    }
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return response()->json([
             'message' => 'Logged out successfully',
             'redirect' => route('login.admin')
@@ -138,6 +168,7 @@ class AdminController extends Controller
             'name' => 'required|string',
             'age' => 'required|numeric',
             'dob' => 'required|date',
+            'email' => 'required|email',
             'father_name' => 'required|string',
             'mother_name' => 'required|string',
             'district' => 'required|string',
@@ -154,6 +185,7 @@ class AdminController extends Controller
             'name.required' => 'The Student Name is required',
             'age.required' => 'The Student Age is required',
             'dob.required' => 'The Student Date Of Birth is required',
+            'email'        => 'The Email is required',
             'father_name.required' => 'The Father Name is required',
             'mother_name.required' => 'The Mother Name is required',
             'district.required' => 'The District is required',
@@ -177,6 +209,7 @@ class AdminController extends Controller
         $student->name = $request->input('name');
         $student->age = $request->input('age');
         $student->dob = $request->input('dob');
+        $student->email = $request->input('email');
         $student->father_name = $request->input('father_name');
         $student->mother_name = $request->input('mother_name');
         $student->district = $request->input('district');
@@ -201,6 +234,7 @@ class AdminController extends Controller
             'name' => 'required|string',
             'age' => 'required|numeric',
             'dob' => 'required|date',
+            'email' => 'required|email',
             'father_name' => 'required|string',
             'mother_name' => 'required|string',
             'district' => 'required|string',
@@ -225,6 +259,7 @@ class AdminController extends Controller
             'name',
             'age',
             'dob',
+            'email',
             'father_name',
             'mother_name',
             'district',
@@ -306,6 +341,7 @@ class AdminController extends Controller
             'name' => 'required|string',
             'age' => 'required|integer',
             'dob' => 'required|date',
+            'email' => 'required|email',
             'father_name' => 'required|string',
             'mother_name' => 'required|string',
             'degree' => 'required|string',
@@ -326,6 +362,7 @@ class AdminController extends Controller
         $teacher->name = $request->input('name');
         $teacher->age = $request->input('age');
         $teacher->dob = $request->input('dob');
+        $teacher->email = $request->input('email');
         $teacher->father_name = $request->input('father_name');
         $teacher->mother_name = $request->input('mother_name');
         $teacher->degree = $request->input('degree');
@@ -341,12 +378,13 @@ class AdminController extends Controller
             'message' => 'Teacher Created Successfully'
         ]);
     }
-    public function updateteacher(Request $request, $id)
+    public function updateTeacher(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
             'name' => 'required|string',
             'age' => 'required|integer',
             'dob' => 'required|date',
+            'email' => 'required|email',
             'father_name' => 'required|string',
             'mother_name' => 'required|string',
             'degree' => 'required|string',
@@ -362,7 +400,7 @@ class AdminController extends Controller
                 'error' => $validate->errors()
             ]);
         }
-        $teacher = Teacher::find($id);
+        $teacher = Teacher::findOrFail($id);
         // $teacher->name = $request->input('name');
         // $teacher->age = $request->input('age');
         // $teacher->dob = $request->input('dob');
@@ -378,6 +416,7 @@ class AdminController extends Controller
             'name',
             'age',
             'dob',
+            'email',
             'father_name',
             'mother_name',
             'degree',
@@ -467,7 +506,6 @@ class AdminController extends Controller
             'status' => 200,
             'message' => 'Teacher Assigned Class Successfully'
         ]);
-
     }
     public function updateTeacherAssignClass(Request $request, $id)
     {
@@ -488,10 +526,12 @@ class AdminController extends Controller
         }
         $teacherAssignClass = TeacherAssignClass::find($id);
         $teacherAssignClass->update($request->only([
-            'teacher_id', 'subject_id', 'class_id'
+            'teacher_id',
+            'subject_id',
+            'class_id'
         ]));
         return response()->json([
-            'status' => 200, 
+            'status' => 200,
             'message' => 'Teacher Assign Class Updated Successfully'
         ]);
     }
@@ -504,4 +544,103 @@ class AdminController extends Controller
             'message' => 'Deleted Successfully'
         ]);
     }
+
+    public function emailSend(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'class'   => 'required|string',
+            'section' => 'required|array|min:1',
+            'section.*' => 'string',
+            'amount'  => 'required|numeric|min:1',
+            'email'   => 'required|array|min:1',
+            'email.*' => 'email'
+        ]);
+
+        // If validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors()
+            ]);
+        }
+        try {
+            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+            // create payment link
+            // $paymentLink = $api->paymentLink->create([
+            //     'amount' => $request->amount * 100, // in paise
+            //     'currency' => 'INR',
+            //     'description' => 'School Fees Payment',
+            //     'callback_url' => url('/payment/callback'),
+            //     'callback_method' => 'get',
+            //     'accept_partial' => false,
+            //     'notes' => [
+            //         'class' => $request->class,
+            //         'section' => implode(',', $request->section)
+            //     ],
+            //     'options' => [
+            //         'upi' => true,
+            //         'card' => false,
+            //         'netbanking' => false,
+            //         'wallet' => false
+            //     ],
+            // ]);
+            $order = $api->order->create([
+                'receipt'         => 'order_rcptid_' . time(),
+                'amount'          => $request->amount * 100, // paise
+                'currency'        => 'INR',
+                'payment_capture' => 1
+            ]);
+
+            foreach ($request->email as $email) {
+                $student = Student::where('email', $email)->first();
+
+                AmountModel::create([
+                    'student_id' => $student?->id,
+                    'email'      => $email,
+                    'class_name' => $request->class . '-' . implode(',', $request->section),
+                    'amount'     => $request->amount,
+                    'payment_id' => $order['id'],
+                    'status'     => 'pending'
+                ]);
+
+                Mail::send('email.fees-email', [
+                    'class'    => $request->class,
+                    'section'  => implode(',', $request->section),
+                    'amount'   => $request->amount,
+                    'order_id' => $order['id'],   // send order_id instead of link
+                    'student'  => $student
+                ], function ($message) use ($email) {
+                    $message->to($email)->subject('School Fees Payment Link');
+                });
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Email(s) sent successfully with Razorpay link!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    public function getEmails(Request $request)
+    {
+        $classes = (array) $request->class;   // array of classes
+        $sections = (array) $request->section; // array of sections
+
+        $emails = Student::whereHas('classModel', function ($q) use ($classes, $sections) {
+            foreach ($classes as $class) {
+                foreach ($sections as $section) {
+                    $q->orWhere('class_name', $class . '-' . $section);
+                }
+            }
+        })
+            ->pluck('email');
+
+        return response()->json($emails);
+    }
+    
 }

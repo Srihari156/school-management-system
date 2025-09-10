@@ -14,10 +14,16 @@ class LoginController extends Controller
 {
     public function adminLogin()
     {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.admin-page');
+        }
         return view('login-page.admin-login');
     }
     public function teacherLogin()
     {
+        if (Auth::guard('teacher')->check()) {
+            return redirect()->route('teacher.teacher-page');
+        }
         return view('login-page.teacher-login');
     }
     public function contactUs()
@@ -72,8 +78,7 @@ class LoginController extends Controller
             //return response()->json(['error' => 'Password Wrong', 'code' => 401]);   
             $credentials = [
                 'username' => $request->username,
-                'password' => $request->password,
-                'role' => 'admin'
+                'password' => $request->password
             ];
 
             if (Auth::guard('admin')->attempt($credentials)) {
@@ -140,7 +145,7 @@ class LoginController extends Controller
         $credentials = [
             'name' => $request->name,
             'password' => $request->password,
-            'role' => 'teacher'
+            'role' => 'teacher'  
         ];
 
         if (Auth::guard('teacher')->attempt($credentials)) {

@@ -53,7 +53,7 @@ class TeacherController extends Controller
     public function getStudentsByClass($class_id)
     {
         $students = Student::where('class_id', $class_id)->get(['id', 'name']);
-
+        
         return response()->json([
             'status' => 200,
             'students' => $students

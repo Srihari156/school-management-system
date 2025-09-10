@@ -19,7 +19,7 @@
                         Total no of Students
                     </div>
                     <div class="display-6">
-                        100
+                        {{$totalStudents}}
                     </div> 
                 </div>
                 <div>
@@ -32,7 +32,7 @@
                         Total no of Teachers
                     </div>
                     <div class="display-6">
-                        30
+                        {{$totalTeachers}}
                     </div> 
                 </div>
                 <div>

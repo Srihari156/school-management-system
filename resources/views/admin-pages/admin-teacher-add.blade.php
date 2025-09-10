@@ -6,24 +6,26 @@
     <div class="mt-3">
 
         <form action="{{route('store.teacher')}}" method="post" id="teacher-form-add">
-            <input type="text" class="form-control input mb-3" name="name" placeholder="Teacher Name" id="teacher-name">
+            <input type="text" class="form-control input " name="name" placeholder="Teacher Name" id="teacher-name">
             <span class="text-danger" id="teacher-name-error"></span>
-            <input type="number" class="form-control input mt-3 mb-3" name="age" placeholder="Age" id="teacher-age">
+            <input type="number" class="form-control input mt-3 " name="age" placeholder="Age" id="teacher-age">
             <span class="text-danger" id="teacher-age-error"></span>
-            <input type="date" class="form-control input mt-3 mb-3" name="dob" placeholder="DOB" id="teacher-dob">
+            <input type="date" class="form-control input mt-3 " name="dob" placeholder="DOB" id="teacher-dob">
             <span class="text-danger" id="teacher-dob-error"></span>
-            <input type="text" class="form-control input mt-3 mb-3" name="father_name" placeholder="Father Name"
+            <input type="text" class="form-control input mt-3" name="email" placeholder="Email Id" id="teacher-email">
+            <span class="text-danger" id="teacher-email-error"></span>
+            <input type="text" class="form-control input mt-3 " name="father_name" placeholder="Father Name"
                 id="teacher-father-name">
             <span class="text-danger" id="teacher-father-name-error"></span>
-            <input type="text" class="form-control input mt-3 mb-3" name="mother_name" placeholder="Mother Name"
+            <input type="text" class="form-control input mt-3 " name="mother_name" placeholder="Mother Name"
                 id="teacher-mother-name">
             <span class="text-danger" id="teacher-mother-name-error"></span>
-            <input type="text" class="form-control input mt-3 mb-3" name="degree" placeholder="Degree" id="teacher-degree">
+            <input type="text" class="form-control input mt-3 " name="degree" placeholder="Degree" id="teacher-degree">
             <span class="text-danger" id="teacher-degree-error"></span>
-            <input type="text" class="form-control input mt-3 mb-3" name="experience" placeholder="Experience"
+            <input type="text" class="form-control input mt-3 " name="experience" placeholder="Experience"
                 id="teacher-experience">
             <span class="text-danger" id="teacher-experience-error"></span>
-            <select class="form-select input mt-3 mb-3" aria-label="Default select example" name="subject_id"
+            <select class="form-select input mt-3 " aria-label="Default select example" name="subject_id"
                 id="teacher-subject-knowledge">
                 <option disabled selected>Select Subjects</option>
                 @foreach ($subject as $items)
@@ -31,16 +33,16 @@
                 @endforeach
             </select>
             <span class="text-danger" id="teacher-subject-id-error"></span>
-            <input type="number" class="form-control input mt-3 mb-3" name="mobile_no" placeholder="Mobile No"
+            <input type="number" class="form-control input mt-3 " name="mobile_no" placeholder="Mobile No"
                 id="teacher-mobile-no">
             <span class="text-danger" id="teacher-mobile-no-error"></span>
-            <input type="text" class="form-control input mt-3 mb-3" name="blood_group" placeholder="Blood Group"
+            <input type="text" class="form-control input mt-3 " name="blood_group" placeholder="Blood Group"
                 id="teacher-blood-group">
             <span class="text-danger" id="teacher-blood-group-error"></span>
             <textarea class="form-control textarea mt-3 mb-3" name="address" placeholder="Address"
                 id="teacher-address"></textarea>
             <span class="text-danger" id="teacher-address-error"></span>
-            <input type="password" class="form-control input mt-3 mb-3" name="password" placeholder="Password"
+            <input type="password" class="form-control input mt-3 " name="password" placeholder="Password"
                 id="teacher-password">
             <span class="text-danger d-block" id="teacher-password-error"></span>
             <button type="submit" name="teacher_submit" class="btn btn-info mt-3 text-light">Add Teacher</button>
@@ -53,6 +55,7 @@
                         <th>Name</th>
                         <th>Age</th>
                         <th>Date Of Birth</th>
+                        <th>Email Id</th>
                         <th>Father Name</th>
                         <th>Mother Name</th>
                         <th>Degree</th>
@@ -73,6 +76,7 @@
                             <td>{{$teachers->name}}</td>
                             <td>{{$teachers->age}}</td>
                             <td>{{$teachers->dob}}</td>
+                            <td>{{$teachers->email}}</td>
                             <td>{{$teachers->father_name}}</td>
                             <td>{{$teachers->mother_name}}</td>
                             <td>{{$teachers->degree}}</td>
@@ -114,6 +118,10 @@
                                                                 placeholder="Date" id="teacher-update-dob-{{$teachers->id}}"
                                                                 value="{{old('dob', $teachers->dob)}}">
                                                             <span id="teacher-dob-error-{{$teachers->id}}" class="text-danger d-block"></span>
+                                                            <input type="text" class="form-control input mt-3" name="email"
+                                                                placeholder="Email ID" id="teacher-update-email-{{$teachers->id}}"
+                                                                value="{{old('email', $teachers->email)}}">
+                                                            <span id="teacher-email-error-{{$teachers->id}}" class="text-danger d-block"></span>
                                                             <input type="text" class="form-control input mt-3" name="father_name"
                                                                 placeholder="Father Name"
                                                                 id="teacher-update-father-name-{{$teachers->id}}"
@@ -215,205 +223,3 @@
     </div>
 @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function () {
-            $("#teacher-form-add").on('submit', function (event) {
-                event.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{route('store.teacher')}}",
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 422) {
-                            if (data.error.name) {
-                                $('#teacher-name-error').html(data.error.name[0]);
-                            }
-                            if (data.error.age) {
-                                $('#teacher-age-error').html(data.error.age[0]);
-                            }
-                            if (data.error.dob) {
-                                $('#teacher-dob-error').html(data.error.dob[0]);
-                            }
-                            if (data.error.father_name) {
-                                $('#teacher-father-name-error').html(data.error.father_name[0]);
-                            }
-                            if (data.error.mother_name) {
-                                $('#teacher-mother-name-error').html(data.error.mother_name[0]);
-                            }
-                            if (data.error.degree) {
-                                $('#teacher-degree-error').html(data.error.degree[0]);
-                            }
-                            if (data.error.experience) {
-                                $('#teacher-experience-error').html(data.error.experience[0]);
-                            }
-                            if (data.error.subject_id) {
-                                $('#teacher-subject-id-error').html(data.error.subject_id[0]);
-                            }
-                            if (data.error.mobile_no) {
-                                $('#teacher-mobile-no-error').html(data.error.mobile_no[0]);
-                            }
-                            if (data.error.blood_group) {
-                                $('#teacher-blood-group-error').html(data.error.blood_group[0]);
-                            }
-                            if (data.error.address) {
-                                $('#teacher-address-error').html(data.error.address[0]);
-                            }
-                            if (data.error.password) {
-                                $('#teacher-password-error').html(data.error.password[0]);
-                            }
-                        } else if (data.status === 200) {
-                            console.log(data.message);
-                            // alert(data.message);
-                            Swal.fire({
-                                title: "Good Job!",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        //alert('not created teachers');
-                        Swal.fire({
-                                title: "Error!",
-                                text: xhr.responseText,
-                                icon: 'error'
-                            });
-                    }
-                });
-            });
-            $('.teacher-form-update').on('submit', function(event) {
-                event.preventDefault();
-                // const actionUrl = $(this).attr('action');
-                 const id = $(this).find('input[name=teacher_id]').val();
-                 const data = {
-                    'name': $(this).find(`#teacher-update-name-${id}`).val(),
-                    'age': $(this).find(`#teacher-update-age-${id}`).val(),
-                    'dob': $(this).find(`#teacher-update-dob-${id}`).val(),
-                    'father_name':$(this).find(`#teacher-update-father-name-${id}`).val(),
-                    'mother_name':$(this).find(`#teacher-update-mother-name-${id}`).val(),
-                    'degree':$(this).find(`#teacher-update-degree-${id}`).val(),
-                    'experience':$(this).find(`#teacher-update-experience-${id}`).val(),
-                    'subject_id':$(this).find(`#teacher-update-subject-id-${id}`).val(),
-                    'address':$(this).find(`#teacher-update-address-${id}`).val(),
-                    'mobile_no':$(this).find(`#teacher-update-mobile-no-${id}`).val(),
-                    'blood_group':$(this).find(`#teacher-update-blood-group-${id}`).val(),
-                 }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: `/update-teacher/${id}`,
-                    type: 'PUT',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 422) {
-                             if (data.error.name) {
-                                $(`#teacher-name-error-${id}`).html(data.error.name[0]);
-                            }
-                            if (data.error.age) {
-                                $(`#teacher-age-error-${id}`).html(data.error.age[0]);
-                            }
-                            if (data.error.dob) {
-                                $(`#teacher-dob-error-${id}`).html(data.error.dob[0]);
-                            }
-                            if (data.error.father_name) {
-                                $(`#teacher-father-name-error-${id}`).html(data.error.father_name[0]);
-                            }
-                            if (data.error.mother_name) {
-                                $(`#teacher-mother-name-error-${id}`).html(data.error.mother_name[0]);
-                            }
-                            if (data.error.degree) {
-                                $(`#teacher-degree-error-${id}`).html(data.error.degree[0]);
-                            }
-                            if (data.error.experience) {
-                                $(`#teacher-experience-error-${id}`).html(data.error.experience[0]);
-                            }
-                            if (data.error.subject_id) {
-                                $(`#teacher-subject-id-error-${id}`).html(data.error.subject_id[0]);
-                            }
-                            if (data.error.mobile_no) {
-                                $(`#teacher-mobile-no-error-${id}`).html(data.error.mobile_no[0]);
-                            }
-                            if (data.error.blood_group) {
-                                $(`#teacher-blood-group-error-${id}`).html(data.error.blood_group[0]);
-                            }
-                            if (data.error.address) {
-                                $(`#teacher-address-error-${id}`).html(data.error.address[0]);
-                            }
-                        } else if(data.status === 200) {
-                            console.log(data.message);
-                            Swal.fire({
-                                title: "Good Job!",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#teacherEditModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    }, 
-                    error: function (xhr) {
-                        console.log(xhr);
-                        //alert('not created teachers');
-                        Swal.fire({
-                                title: "Error!",
-                                text: xhr.responseText,
-                                icon: 'error'
-                        });
-                    }
-                });
-            });
-            $('.teacher-form-delete').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find(`input[name="teacher_delete_id"]`).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url:`/delete-teacher/${id}`,
-                    type:"delete",
-                    success: function(data) {
-                        console.log(data);
-                        if (data.status === 200) {
-                            console.log(data.message);
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#deleteTeacherModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 5000);
-                        }
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
-                        Swal.fire({
-                                title: "Error!",
-                                text: xhr.responseText,
-                                icon: 'error'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-@endsection

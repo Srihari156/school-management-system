@@ -8,29 +8,29 @@
 
         <form action="{{route('store.teacher-assign-class')}}" method="post" id="teacher-assign-class-form">
             @csrf
-            <select class="form-select input mb-3" aria-label="Default select example" name="teacher_id" id="teacher-name">
+            <select class="form-select input " aria-label="Default select example" name="teacher_id" id="teacher-name">
                 <option disabled selected>Select Teacher Name</option>
                 @foreach ($teacher as $item)
                     <option value="{{$item->id}}">{{$item->name}}</option>
                 @endforeach
 
             </select>
-            <span class="text-danger" id="teacher-name-error"></span>
-            <select class="form-select input mb-3" aria-label="Default select example" name="subject_id"
+            <span class="text-danger mb-3" id="teacher-name-error"></span>
+            <select class="form-select input  mt-2" aria-label="Default select example" name="subject_id"
                 id="teacher-subject">
                 <option disabled selected>Select Subjects</option>
                 @foreach ($subject as $item)
                     <option value="{{$item->id}}">{{$item->subject}}</option>
                 @endforeach
             </select>
-            <span class="text-danger" id="teacher-subject-error"></span>
-            <select class="form-select input mb-3" aria-label="Default select example" name="class_id" id="student-class">
+            <span class="text-danger mb-3" id="teacher-subject-error"></span>
+            <select class="form-select input  mt-2" aria-label="Default select example" name="class_id" id="student-class">
                 <option disabled selected>Select Class</option>
                 @foreach ($class as $item)
                     <option value="{{$item->id}}">{{$item->class_name}}</option>
                 @endforeach
             </select>
-            <span class="text-danger" id="teacher-class-error"></span>
+            <span class="text-danger d-block mb-3" id="teacher-class-error"></span>
             <button type="submit" name="assign_class_teacher_submit" class="btn btn-info mt-3 text-light ">Add Assign Class
                 Teacher</button>
         </form>
@@ -169,142 +169,8 @@
     </div>
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
-        $(document).ready(function () {
-            $('#teacher-assign-class-form').on('submit', function (event) {
-                event.preventDefault();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '{{route('store.teacher-assign-class')}}',
-                    type: 'post',
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.code === 422) {
-                            if (data.error.teacher_id) {
-                                $('#teacher-name-error').html(data.error.teacher_id[0]);
-                            }
-                            if (data.error.subject_id) {
-                                $('#teacher-subject-error').html(data.error.subject_id[0]);
-                            }
-                            if (data.error.class_id) {
-                                $('#teacher-class-error').html(data.error.class_id[0]);
-                            }
-                        } else if (data.status === 200) {
-                            console.log(data.message);
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $('#teacher-assign-class-form')[0].reset();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 3000);
-                        }
-
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        Swal.fire({
-                            title: "Error !",
-                            text: 'not created teacher assigned class',
-                            icon: 'error'
-                        });
-                    }
-                });
-
-            });
-            $('.teacher-assign-class-form-update').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find("input[name='teacher_assign_class_id']").val();
-                
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: `/update-teacher-assign-class/${id}`,
-                    type: 'put',
-                    data: $(this).serialize(),
-                    success: function (data) {
-                        console.log(data);
-                        if (data.status === 422) {
-                            if (data.error.teacher_id) {
-                                $(`#teacher-name-error-${id}`).html(data.error.teacher_id[0]);
-                            }
-                            if (data.error.subject_id) {
-                                $(`#teacher-subject-error-${id}`).html(data.error.subject_id[0]);
-                            }
-                            if (data.error.class_id) {
-                                $(`#teacher-class-error-${id}`).html(data.error.class_id[0]);
-                            }
-                        } else if(data.status === 200) {
-                            console.log(data.message);
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#teacherAssignEditModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
-                        }
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        Swal.fire({
-                            title: "Error !",
-                            text: "Not Updated",
-                            icon: 'error'
-                        });
-                    }
-                });
-            });
-            $('.teacher-assign-class-form-delete').on('submit', function (event) {
-                event.preventDefault();
-                const id = $(this).find("input[name='teacher_assign_delete_id']").val();
-                console.log(id);
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: `/delete-teacher-assign-class/${id}`,
-                    type: 'delete',
-                    success: function(data) {
-                        console.log(data);
-                        if (data.status === 200) {
-                            Swal.fire({
-                                title: "Good Job !",
-                                text: data.message,
-                                icon: 'success'
-                            });
-                            $(`#teacherAssignDeleteModal${id}`).modal('hide');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
-                        }
-                    },
-                    error: function (xhr) {
-                        console.log(xhr);
-                        Swal.fire({
-                            title: "Error !",
-                            text: "Not Deleted",
-                            icon: 'error'
-                        });
-                    }
-                });
-            });
-        });
+        
     </script>
-@endsection
+@endsection --}}
